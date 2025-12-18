@@ -7,19 +7,24 @@
 
 # Only one programmer can currently be connected to the PC
 
+COMMANDER_SERIALNO ?= ""
+ifneq ($(SERIALNO),)
+  COMMANDER_SERIALNO := --serialno $(SERIALNO)
+endif
+
 install program: $(PROGRAM_IMAGE)
-	commander flash $(PROGRAM_IMAGE) --device EFR32 # $(MCU_PART)
+	commander flash $(COMMANDER_SERIALNO) $(PROGRAM_IMAGE) --device EFR32 # $(MCU_PART)
 
 erase:
-	commander device masserase --device EFR32 # $(MCU_PART)
+	commander device masserase $(COMMANDER_SERIALNO) --device EFR32 # $(MCU_PART)
 
 recover:
-	commander device recover --device $(MCU_FAMILY)
+	commander device recover $(COMMANDER_SERIALNO) --device $(MCU_FAMILY)
 
 reboot restart reset:
-	commander device reset --device EFR32 # $(MCU_PART)
+	commander device reset $(COMMANDER_SERIALNO) --device EFR32 # $(MCU_PART)
 
 install-sig: $(PROGRAM_SIGDATA)
-	commander flash $(PROGRAM_SIGDATA) --address $(MCU_SIGDATA_ADDR) --device EFR32 # $(MCU_PART)
+	commander flash $(COMMANDER_SERIALNO) $(PROGRAM_SIGDATA) --address $(MCU_SIGDATA_ADDR) --device EFR32 # $(MCU_PART)
 
 .PHONY: install program erase recover reboot restart reset install-sig
