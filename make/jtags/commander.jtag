@@ -7,7 +7,7 @@
 
 # Only one programmer can currently be connected to the PC
 
-COMMANDER_SERIALNO ?= ""
+COMMANDER_SERIALNO ?=
 ifneq ($(SERIALNO),)
   COMMANDER_SERIALNO := --serialno $(SERIALNO)
 endif
